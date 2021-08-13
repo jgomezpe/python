@@ -2,6 +2,9 @@ package python;
 
 import aplikigo.process.ProcessRunner;
 
+/**
+ * A Python interpreter (receives the python script to be run)
+ */
 public class PythonCodeRunner extends ProcessRunner{
     public static String wrap(String code) {
 	StringBuilder sb = new StringBuilder();
