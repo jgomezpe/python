@@ -1,4 +1,4 @@
-# python
+# Python
 Python is a Java (server)/JavaScript (client) web solution for interpreting Python code. It requires the following java libraries:
 
 &nbsp;aplikigo.jar, kerno.jar, jxon.jar, lifya.jar, and kompari.jar. 
