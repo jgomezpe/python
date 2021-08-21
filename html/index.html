@@ -17,22 +17,20 @@ function KonektiMain(){
 	var lang = urlParams.get('lang')
 	if( lang === undefined || lang === null ) lang = window.navigator.language
 	lang = lang.split('-')[0]
-	// Manage different languages
 	if( lang != 'es' && lang != 'en' ) lang = 'en'
-	var title = lang=='en'?"Simple Python Interpreter":"Interprete de Python Simple" 
-	var footer = lang=='en'?"Developed by Professor Jonatan Gomez, Ph. D.":"Desarrollado por el Profesor Jonatan Gómez, Ph. D."
-	var stopCaption = lang=='en'?'Stop':'Parar' 
-	var runCaption = lang=='en'?'Run':'Ejecutar'
-			
+
 	Konekti.hcf("main", 
 		{ "plugin":"html" },
-		{"plugin":"header","icon":"fa fa-lightbulb-o", "caption":title, "h":3},
-		{"plugin":"header","caption":footer, "h":6}, 			function(){
+		{"plugin":"header","icon":"fa fa-lightbulb-o", "caption":lang=='en'?"Simple Python Interpreter":"Interprete de Python Simple", "h":3},
+		{"plugin":"header","caption":lang=='en'?"Developed by Professor Jonatan Gomez, Ph. D.":"Desarrollado por el Profesor Jonatan Gómez, Ph. D.", "h":6}, 
+		function(){
+            // This function is called when header/content/footer gui is ready
+            // Here you must set your server address (replace my.ip.address.com)
+			var config = {'id':'main-content', 'url': "https://my.ip.address.com:8443/pythonserver/python", "run":"btn", 
+			"initial":"x=int(input('?'))\nprint(x+3)\n", 'captionRun':lang=='en'?'Run':'Ejecutar', 'captionStop':lang=='en'?'Stop':'Parar',
+			'maximum':1000000 }
 			// This function is called when header/content/footer gui is ready
-			// Here you must set your server address (replace my.ip.address.com)
-			var python = 
-				new Python("main-content", "https://my.ip.address.com:8443/pythonserver/python", "col", 
-					runCaption,stopCaption)
+			var python = new Python(config)
 		}
 	)
 }
