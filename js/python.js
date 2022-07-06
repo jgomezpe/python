@@ -12,6 +12,26 @@
 * @version 1.0
 */
 
+Konekti.uses('split', 'ace', 'btn', 'terminal', 'finapunkto')
+
+/** Konekti Plugin for Python */
+class PythonPlugIn extends PlugIn{
+    /** Creates a Plugin for Python */
+    constructor(){ super('python') }
+    
+    /**
+     * Creates a client for the plugin's instance
+     * @param config Python configuration
+     */
+    client(config){ return new Python(config) }
+}
+
+if( Konekti.python===undefined) new PythonPlugIn()
+
+
+const playIcon = "fa-play-circle-o" 
+const stopIcon = "fa-stop-circle-o"
+
 /*
  *
  * A client for a Python server
@@ -30,34 +50,11 @@ class Python extends Client{
 	 * captionStop Caption for the run button when running python code (to stop code running)
 	 */
 	constructor(config){
-		super(config.id+"Python")
+		super(config)
 		this.url = config.url
 		this.running = false
-		this.captionRun = config.captionRun || ''
-		this.captionStop = config.captionStop || ''
-		this.editorID = config.editor || 'coderPy'
-		this.consoleID = config.console || 'viewerPy'
-		var type = config.type || 'col'
-		var maxCharsConsole = config.maximum || 1000000
-		var initial = config.initial || ''
-		
-		var aceCfg = { "plugin":"ace","id":this.editorID,"mode":"python","initial":initial }
-		var split = { "id":config.id, "type":type,
-		  "start":60,
-		  "two":{"plugin":"terminal","id":this.consoleID,"initial":"","maximum":maxCharsConsole}
-		}
-		
-		this.btnID = config.run || 'runPy'
-		var btnCfg = {"plugin":"btn","id":this.btnID, "icon":"fa fa-play","caption":this.captionRun,
-		  	  "options":"w3-bar-item w3-medium","onclick":{"client":this.id, "method":"run"}}
-		var btn = Konekti.client( this.btnID )
-		if( btn === undefined || btn === null )
-		 split.one =  { "plugin":"hcf", "content": aceCfg, "header":btnCfg}
-		else{
-			btn.update(btnCfg)
-			split.one = aceCfg
-		}
-		Konekti.split( split )
+		this.captionRun = config.captionRun
+		this.captionStop = config.captionStop
 	}
 
 	/**
@@ -65,26 +62,65 @@ class Python extends Client{
 	 */
 	run(){
 		var x = this
-		var terminal = Konekti.client(x.consoleID)
-		var editor = Konekti.client(x.editorID)
-		var btn = Konekti.client(x.btnID)
+		var terminal = Konekti.client[x.id+'Console']
+		var editor = Konekti.client[x.id+'Coder']
+		var btn = Konekti.client[x.id+'Btn']
 		if( x.running ){
 			x.server.end()
-			btn.update({"icon":"fa fa-play","caption":x.captionRun})
+			btn.update({"icon":playIcon,"caption":x.captionRun})
 		}else{
 			terminal.init()
-			btn.update({"icon":"fa fa-stop","caption":x.captionStop})
+			btn.update({"icon":stopIcon,"caption":x.captionStop})
 			x.server = new ProcessRunner(x.url,"PythonServer",[editor.getText()])
 			terminal.set(x.server)
 			x.server.run( function(response){
 				if( response !== undefined ) terminal.output(response)
 				else{
-					btn.update({"icon":"fa fa-play","caption":x.captionRun})
+					btn.update({"icon":playIcon,"caption":x.captionRun})
 					x.running = false
 				}
 			})
 		}
 		x.running = !x.running 
 	}
+
+	editor(){ return Konekti.client[this.id+'Coder'] }
 }
 
+/**
+ * Creates a Python server client configuration object
+ * @param id GUI's id,
+ * @param width Width of the terminal's component
+ * @param height Height of the terminal's component
+ * @param url Python's server url
+ * @param type If python console will be displayed as a row ('row') or as a column ('col') 
+ * @param theme Editor's theme 
+ * @param captionRun Caption for the run button when ready for running python code (to start code running)
+ * @param captionStop Caption for the run button when running python code (to stop code running)
+ * @param parent Parent component 
+ */
+Konekti.pythonConfig = function(id, width, height, url, type, theme, captionRun, captionStop, parent='KonektiMain'){
+	captionStop = captionStop || ''
+	captionRun = captionRun || '' 
+	var one = Konekti.aceConfig(id+'Coder', '100%', '100%', '', 'python', theme)
+	var btn = Konekti.btnConfig(id+'Btn', playIcon, captionRun, {"client":id, "method":"run"}, 'w3-blue-grey', '', id+'Two')
+	var term = Konekti.terminalConfig(id+'Console', '100%', 'rest', '', 1000000, id+'Two')
+	var two = Konekti.divConfig(id+'Two', '100%', '100%', '', [btn,term], id+'Split')
+	var split = Konekti.splitConfig(id+'Split','100%','100%', type, 60, one, two, id)
+	return {'plugin':'python', 'id':id, 'width':width, 'height' :height, 'parent':parent, 'url':url, 'captionRun':captionRun, 'captionStop':captionStop, 'children':[split]}
+}
+
+/**
+ * Creates a Python server client
+ * @param id GUI's id,
+ * @param width Width of the terminal's component
+ * @param height Height of the terminal's component
+ * @param url Python's server url
+ * @param type If python console will be displayed as a row ('row') or as a column ('col') 
+ * @param theme Editor's theme 
+ * @param captionRun Caption for the run button when ready for running python code (to start code running)
+ * @param captionStop Caption for the run button when running python code (to stop code running)
+ */
+ Konekti.python = function(id, width, height, url, type, theme, captionRun, captionStop){
+	return Konekti.build(Konekti.pythonConfig(id, width, height, url, type, theme, captionRun, captionStop))
+}
