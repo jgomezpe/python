@@ -1,38 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <script type='text/javascript' src='https://numtseng.com/modules/konekti/Konekti.js'></script> 
-    <script type='text/javascript' src='https://numtseng.com/modules/finapunkto.js'></script> 
-    <script type='text/javascript' src='https://numtseng.com/modules/python.js'></script> 
+	<meta charset="UTF-8">
+	<title>Python IDE</title>
+	<script type='text/javascript' src='https://jgomezpe.github.io/konekti/src/konekti.js'></script> 
 </head>
 <body>   
-<div id='main' style='height:100%;width:100%'></div>
 <script>
-Konekti.uses('hcf','split')
+Konekti.uses('header', 'https://jgomezpe.github.io/python/js/python.js')
 
 function KonektiMain(){
 	var client = new Client('client')
-	var urlParams = new URLSearchParams(window.location.search)
-	var lang = urlParams.get('lang')
-	if( lang === undefined || lang === null ) lang = window.navigator.language
+	var lang = window.navigator.language
 	lang = lang.split('-')[0]
 	if( lang != 'es' && lang != 'en' ) lang = 'en'
 
-	Konekti.hcf("main", 
-		{ "plugin":"html" },
-		{"plugin":"header","icon":"fa fa-lightbulb-o", "caption":lang=='en'?"Simple Python Interpreter":"Interprete de Python Simple", "h":3},
-		{"plugin":"header","caption":lang=='en'?"Developed by Professor Jonatan Gomez, Ph. D.":"Desarrollado por el Profesor Jonatan Gómez, Ph. D.", "h":6}, 
-		function(){
-            // This function is called when header/content/footer gui is ready
-            // Here you must set your server address (replace my.ip.address.com)
-			var config = {'id':'main-content', 'url': "https://my.ip.address.com:8443/pythonserver/python", "run":"btn", 
-			"initial":"x=int(input('?'))\nprint(x+3)\n", 'captionRun':lang=='en'?'Run':'Ejecutar', 'captionStop':lang=='en'?'Stop':'Parar',
-			'maximum':1000000 }
-			// This function is called when header/content/footer gui is ready
-			var python = new Python(config)
-		}
-	)
+	Konekti.header('header1','fa-gavel', lang=='en'?'Python IDE by Professor Jonatan Gomez':'IDE de Python del Profesor Jonatan Gomez', 3, 'w3-blue-grey w3-center' )
+	// @TODO Set my.ip.address to the python server address
+	var py = Konekti.python("pythongui", "100%", "100%",  'https://my.ip.address:8443/pythonserver/python', 'col', '', lang=='en'?'Run':'Ejecutar', lang=='en'?'Stop':'Parar')
+	py.editor().setText("x=int(input('?'))\nprint(x+3)\n", 'captionRun')
 }
 
 </script>   
