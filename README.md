@@ -5,15 +5,14 @@ Python is a Java (server)/JavaScript (client) web solution for interpreting Pyth
 
 &nbsp;These libraries can be down loaded from <A HREF="https://github.com/jgomezpe/libs/">https://github.com/jgomezpe/libs/</A> 
 
-&nbsp;It also requires the additional javascript <A HREF="https://numtseng.com/modules/finapunkto.js">https://numtseng.com/modules/finapunkto.js</A>
-<h3>Version 1.0</h3>
+<h3>Version 2.0</h3>
 <h3>Copyright (c)</h3>
 &nbsp;Author: <A HREF="https://disi.unal.edu.co/~jgomezpe/"> Jonatan Gomez-Perdomo </A>
 &nbsp;E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A>
 
 &nbsp;A Python school using this component: <A HREF="https://numtseng.com/python/">https://numtseng.com/python/</A>
 
-&nbsp;JavaScript ready to use: <A HREF="https://numtseng.com/modules/python.js">https://numtseng.com/modules/python.js</A>
+&nbsp;JavaScript ready to use: <A HREF="https://jgomezpe.github.io/python/js/python.js">https://jgomezpe.github.io/python/js/python.js</A>
 
 &nbsp;Source code (Java/JavaScript/HTML/XML): <A HREF="https://github.com/jgomezpe/python/">https://github.com/jgomezpe/python/</A>
 
