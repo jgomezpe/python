@@ -12,7 +12,7 @@
 * @version 1.0
 */
 
-Konekti.uses('split', 'ace', 'btn', 'terminal', 'finapunkto')
+Konekti.load('split', 'ace', 'btn', 'terminal', 'finapunkto')
 
 /** Konekti Plugin for Python */
 class PythonPlugIn extends PlugIn{
